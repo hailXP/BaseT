@@ -48,7 +48,7 @@
         textarea {
             width: 90%;
             max-width: 600px;
-            height: 80px;
+            height: auto;
             margin-bottom: 15px;
             padding: 10px;
             font-family: 'Courier New', Courier, monospace;
@@ -70,8 +70,8 @@
     <div id="output"><span></span></div>
     <button onclick="copyToClipboard()">Copy</button>
 
-    <textarea readonly id="python-code">x = ''.join(getattr(__import__('string', fromlist=['ascii_lowercase']), 'ascii_lowercase')[(int(getattr(__import__('time', fromlist=['time']), 'time')() * 1000) // (26**i) % 26)] for i in range(int(getattr(__import__('math', fromlist=['log']), 'log')(int(getattr(__import__('time', fromlist=['time']), 'time')() * 1000), 26)), -1, -1))</textarea>
-    <textarea readonly id="js-code">const x = Date.now().toString(26).split('').map(c => parseInt(c, 26)).filter(v=>v<26).map(v => String.fromCharCode(v + 97)).join('')</textarea>
+    <textarea readonly id="python-code" rows="2">x = ''.join(getattr(__import__('string', fromlist=['ascii_lowercase']), 'ascii_lowercase')[(int(getattr(__import__('time', fromlist=['time']), 'time')() * 1000) // (26**i) % 26)] for i in range(int(getattr(__import__('math', fromlist=['log']), 'log')(int(getattr(__import__('time', fromlist=['time']), 'time')() * 1000), 26)), -1, -1))</textarea>
+    <textarea readonly id="js-code" rows="2">const x = Date.now().toString(26).split('').map(c => parseInt(c, 26)).filter(v=>v<26).map(v => String.fromCharCode(v + 97)).join('')</textarea>
 
     <script>
         let lastOutput = "";
