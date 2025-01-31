@@ -65,7 +65,7 @@
 import time
 from math import log
         
-alpha='abcdefghijklmnopqrstuvwxyz';t=int(time.time()*1000);p=int(log(t,26));x = ''.join(alpha[(t//(26**i))%26] for i in reversed(range(p+1)))</textarea>
+t=int(time.time()*1000);x = ''.join('abcdefghijklmnopqrstuvwxyz'[(t//(26**i))%26] for i in reversed(range(int(log(t,26))+1)))</textarea>
     <textarea readonly rows="2">const x = Date.now().toString(26).split('').map(c => parseInt(c, 26)).filter(v=>v<26).map(v => String.fromCharCode(v + 97)).join('')</textarea>
 
     <script>
