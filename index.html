@@ -25,25 +25,17 @@
             background-color: #282828;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             color: #00ddff;
+            cursor: pointer; /* Make the container clickable */
+            transition: all 0.3s ease; /* Add transition for smooth changes */
         }
-        button {
-            padding: 10px 20px;
-            background-color: #0077cc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s ease, transform 0.2s ease;
+        #output.copied {
+            color: #00ddff; /* Color for "Copied!" state */
         }
-        button:hover {
-            background-color: #005fa3;
-            transform: translateY(-2px);
+        #output span {
+            transition: opacity 0.5s ease; /* Add transition for fade effect */
         }
-        button:active {
-            transform: translateY(0);
+        #output.copied span {
+            opacity: 0; /* Hide the time text when "Copied!" is shown */
         }
         textarea {
             width: 90%;
@@ -68,9 +60,8 @@
 </head>
 <body>
     <div id="output"><span></span></div>
-    <button onclick="copyToClipboard()">Copy</button>
 
-    <textarea readonly rows="2">x = ''.join(getattr(__import__('string', fromlist=['ascii_lowercase']), 'ascii_lowercase')[(int(getattr(__import__('time', fromlist=['time']), 'time')() * 1000) // (26**i) % 26)] for i in range(int(getattr(__import__('math', fromlist=['log']), 'log')(int(getattr(__import__('time', fromlist=['time']), 'time')() * 1000), 26)), -1, -1))</textarea>
+    <textarea readonly rows="2">import time;alpha='abcdefghijklmnopqrstuvwxyz';t=int(time.time()*1000);s='';while t>0:s=alpha[t%26]+s;t//=26;print(s)</textarea>
     <textarea readonly rows="2">const x = Date.now().toString(26).split('').map(c => parseInt(c, 26)).filter(v=>v<26).map(v => String.fromCharCode(v + 97)).join('')</textarea>
 
     <script>
@@ -82,17 +73,23 @@
         }
 
         function copyToClipboard() {
-            const text = document.getElementById('output').textContent;
+            const outputContainer = document.getElementById('output');
+            const text = outputContainer.textContent;
+
             navigator.clipboard.writeText(text).then(() => {
-                const button = document.querySelector('button');
-                button.textContent = 'Copied!';
+                outputContainer.classList.add('copied');
+                outputContainer.textContent = 'Copied!';
+
                 setTimeout(() => {
-                    button.textContent = 'Copy';
-                }, 1500);
+                    outputContainer.classList.remove('copied');
+                    updateOutput(); // Update the time after fading back
+                }, 2000);
             });
         }
 
         setInterval(updateOutput, 100);
+
+        document.getElementById('output').addEventListener('click', copyToClipboard);
 
         document.querySelectorAll('textarea').forEach(textarea => {
             textarea.addEventListener('click', () => {
