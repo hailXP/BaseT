@@ -1,107 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic String Display</title>
-    <style>
-        body {
-            font-family: 'Roboto Mono', monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #121212;
-            color: #eee;
-            transition: background-color 0.3s ease;
-            overflow: hidden;
-        }
-        #output {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            background-color: #282828;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            color: #00ddff;
-            cursor: pointer; /* Make the container clickable */
-            transition: all 0.3s ease; /* Add transition for smooth changes */
-        }
-        #output.copied {
-            color: #00ddff; /* Color for "Copied!" state */
-        }
-        #output span {
-            transition: opacity 0.5s ease; /* Add transition for fade effect */
-        }
-        #output.copied span {
-            opacity: 0; /* Hide the time text when "Copied!" is shown */
-        }
-        textarea {
-            width: 90%;
-            max-width: 600px;
-            height: auto;
-            margin-bottom: 15px;
-            padding: 10px;
-            font-family: 'Courier New', Courier, monospace;
-            resize: vertical;
-            background-color: #1e1e1e;
-            color: #9cdcfe;
-            border: 1px solid #555;
-            border-radius: 5px;
-            transition: box-shadow 0.3s ease;
-        }
-        textarea:focus {
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 119, 204, 0.7);
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dynamic String Display - Skeuomorphism / Neo-Brutalism / Lo-fi</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2; 
+      
+      font-family: 'Roboto Mono', monospace;
+      color: #333;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      
+      min-height: 100vh;
+    }
+
+    #output {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      padding: 15px 20px;
+
+      border: 3px solid #000; 
+      border-radius: 8px;
+      background: #fafafa;
+      box-shadow:
+        4px 4px 0px #000,
+        inset 0 2px 4px rgba(0,0,0,0.2);
+      
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+
+    #output:active {
+      transform: translate(2px, 2px);
+      box-shadow:
+        2px 2px 0px #000,
+        inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    #output.copied {
+      background: #ffee58;
+      color: #000;
+    }
+
+    #output span {
+      transition: opacity 0.5s ease;
+    }
+
+    textarea {
+      width: 90%;
+      max-width: 600px;
+      margin-bottom: 15px;
+      padding: 10px;
+
+      background-color: #ffffff;
+      color: #000;
+      
+      border: 3px solid #000;
+      border-radius: 5px;
+      box-shadow: 2px 2px 0 #000;
+      
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1em;
+      resize: vertical;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      box-shadow: 2px 2px 0 #ff4081;
+      transform: translate(-1px, -1px);
+    }
+  </style>
 </head>
 <body>
-    <div id="output"><span></span></div>
+  <div id="output"><span></span></div>
 
-    <textarea readonly rows="2">
+  <textarea readonly rows="2">
 import time
 from math import log
-        
-t=int(time.time()*1000);x = ''.join('abcdefghijklmnopqrstuvwxyz'[(t//(26**i))%26] for i in reversed(range(int(log(t,26))+1)))</textarea>
-    <textarea readonly rows="2">const x = Date.now().toString(26).split('').map(c => parseInt(c, 26)).filter(v=>v<26).map(v => String.fromCharCode(v + 97)).join('')</textarea>
+    
+t=int(time.time()*1000);x = ''.join('abcdefghijklmnopqrstuvwxyz'[(t//(26**i))%26] for i in reversed(range(int(log(t,26))+1)))
+  </textarea>
 
-    <script>
-        function updateOutput() {
-            const x = Date.now().toString(26).split('').map(c => parseInt(c, 26)).filter(v=>v<26).map(v => String.fromCharCode(v + 97)).join('');
-            const outputElement = document.getElementById('output').querySelector('span');
+  <textarea readonly rows="2">
+const x = Date.now().toString(26).split('').map(c => parseInt(c, 26)).filter(v=>v<26).map(v => String.fromCharCode(v + 97)).join('')
+  </textarea>
 
-            outputElement.textContent = x;
-        }
+  <script>
+    let isCopied = false;
 
-        function copyToClipboard() {
-            const outputContainer = document.getElementById('output');
-            const text = outputContainer.textContent;
+    function updateOutput() {
+      const x = Date.now().toString(26)
+        .split('')
+        .map(c => parseInt(c, 26))
+        .filter(v => v < 26)
+        .map(v => String.fromCharCode(v + 97))
+        .join('');
 
-            navigator.clipboard.writeText(text).then(() => {
-                outputContainer.classList.add('copied');
-                outputContainer.textContent = 'Copied!';
+      const outputElement = document.getElementById('output').querySelector('span');
+      outputElement.textContent = x;
+    }
 
-                setTimeout(() => {
-                    outputContainer.classList.remove('copied');
-                    updateOutput(); // Update the time after fading back
-                }, 2000);
-            });
-        }
+    function copyToClipboard() {
+      const outputContainer = document.getElementById('output');
+      const outputSpan = outputContainer.querySelector('span');
+      const text = outputSpan.textContent;
 
-        setInterval(updateOutput, 100);
+      navigator.clipboard.writeText(text).then(() => {
+        isCopied = true;
 
-        document.getElementById('output').addEventListener('click', copyToClipboard);
+        outputContainer.classList.add('copied');
+        outputSpan.textContent = 'Copied!';
 
-        document.querySelectorAll('textarea').forEach(textarea => {
-            textarea.addEventListener('click', () => {
-                textarea.select();
-            });
-        });
+        setTimeout(() => {
+          isCopied = false;
+          outputContainer.classList.remove('copied');
+          updateOutput();
+        }, 2000);
+      });
+    }
 
+    setInterval(() => {
+      if (!isCopied) {
         updateOutput();
-    </script>
+      }
+    }, 100);
+
+    document.getElementById('output').addEventListener('click', copyToClipboard);
+
+    document.querySelectorAll('textarea').forEach(textarea => {
+      textarea.addEventListener('click', () => {
+        textarea.select();
+      });
+    });
+
+    updateOutput();
+  </script>
 </body>
 </html>
